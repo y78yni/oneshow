@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.jun.oneshow.constants.UserConstants;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import javax.validation.constraints.AssertFalse;
 
 /**
  * <p>
@@ -32,12 +35,13 @@ public class User extends Model<User> {
     /**
      * 用户名(昵称)
      */
+    @NotBlank(message = "昵称不能为空")
     private String userName;
 
     /**
      * 手机
      */
-    @NotNull(message = "手机不能为空")
+    //@NotEmpty(message = "手机不能为空")
     //@Pattern(regexp = UserConstants.MOBILE_PHONE_NUMBER_PATTERN, message = "手机格式不正确")
     private Integer mobile;
 
@@ -54,20 +58,20 @@ public class User extends Model<User> {
     /**
      * 登录名
      */
-    @NotNull(message = "用户名不能为空")
+    @NotBlank(message = "用户名不能为空")
     private String loginName;
 
     /**
      * 邮箱
      */
-    @NotNull(message = "邮箱不能为空")
-    @Pattern(regexp = UserConstants.EMAIL_PATTERN, message = "邮箱格式不正确")
+//    @NotBlank(message = "邮箱不能为空")
+//    @Pattern(regexp = UserConstants.EMAIL_PATTERN, message = "邮箱格式不正确")
     private String email;
 
     /**
      * 密码
      */
-    @NotNull(message = "密码不能为空")
+//    @NotBlank(message = "密码不能为空")
     private String userPassword;
 
     public static long getSerialVersionUID() {

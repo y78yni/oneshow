@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -40,8 +41,8 @@ public class UserController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public Boolean login(@Validated User user, BindingResult result) {
-       // Map<String, Object> result = CommonUtil.getDefualtResult();
+    public Map<String, Object> login(@Valid User user, BindingResult result) {
+        Map<String, Object> result1 = CommonUtil.getDefualtResult();
         // List<User> user =  userService.list();
 //
 //        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -52,10 +53,10 @@ public class UserController {
 //        if(user1 ==null){
 //            throw new SBException(SystemErrorCode.USER_USERPASSWORD_ERROR);
 //        }
-//        boolean a = ;
-//        result.put("user", a);
-//        result.put("msg","成功");
-        return userService.save(user);
+        boolean a = userService.save(user);
+        result1.put("user", a);
+        result1.put("msg","成功");
+        return result1;
     }
     /**
      * 查询全部

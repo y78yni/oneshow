@@ -3,13 +3,18 @@ package com.jun.oneshow.exception;
 import com.jun.oneshow.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -39,7 +44,44 @@ public class ExceptionHandlerAdvice {
 		logger.error("发生SBException异常：" + errorsWriter);
 		return CommonUtil.getErrorResultMap(result, e);
 	}
-
+	//json格式
+	@ExceptionHandler(value = MethodArgumentNotValidException.class)
+	public Map<String, Object> errorHandler(MethodArgumentNotValidException e) {
+		Map<String, Object> result = CommonUtil.getDefualtResult();
+		StringBuilder errorMsg = new StringBuilder();
+		BindingResult re = e.getBindingResult();
+		for (ObjectError error : re.getAllErrors()) {
+			errorMsg.append(error.getDefaultMessage()).append(",");
+		}
+		errorMsg.delete(errorMsg.length() - 1, errorMsg.length());
+		return CommonUtil.getErrorResultMap(result, e);
+	}
+	//表单格式
+	@ExceptionHandler(value = BindException.class)
+	public Map errorHandler(BindException ex) {
+		Map<String, Object> result1 = CommonUtil.getDefualtResult();
+		BindingResult result = ex.getBindingResult();
+		StringBuilder errorMsg = new StringBuilder();
+		for (ObjectError error : result.getAllErrors()) {
+			errorMsg.append(error.getDefaultMessage()).append(",");
+		}
+		errorMsg.delete(errorMsg.length() - 1, errorMsg.length());
+		return CommonUtil.getErrorResultMap(result1, ex);
+	}
+	/**
+	 * 拦截全局Validated异常
+	 *
+	 * @param e
+	 * @return result
+	 */
+	@ExceptionHandler(ConstraintViolationException.class)
+	public Map<String, Object> Validated(ConstraintViolationException e) {
+		Map<String, Object> result = CommonUtil.getDefualtResult();
+		StringWriter errorsWriter = new StringWriter();
+		e.printStackTrace(new PrintWriter(errorsWriter));
+		logger.error("发生Exception异常：" + errorsWriter);
+		return CommonUtil.getErrorResultMap(result, e);
+	}
 	/**
 	 * 拦截未知的运行时异常
 	 */
@@ -67,20 +109,7 @@ public class ExceptionHandlerAdvice {
 		return CommonUtil.getErrorResultMap(result, SystemErrorCode.SYS_INIT_ERROR);
 	}
 
-	/**
-	 * 拦截全局Validated异常
-	 *
-	 * @param e
-	 * @return result
-	 */
-	@ExceptionHandler(ConstraintViolationException.class)
-	public Map<String, Object> Validated(ConstraintViolationException e) {
-		Map<String, Object> result = CommonUtil.getDefualtResult();
-		StringWriter errorsWriter = new StringWriter();
-		e.printStackTrace(new PrintWriter(errorsWriter));
-		logger.error("发生Exception异常：" + errorsWriter);
-		return CommonUtil.getErrorResultMap(result, e);
-	}
+
 	/**
 	 * 请求方式不支持
 	 */
