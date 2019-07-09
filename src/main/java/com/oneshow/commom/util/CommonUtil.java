@@ -21,9 +21,6 @@ public class CommonUtil {
 		if (e instanceof SBException) {
 			SBException sbException = (SBException) e;
 			errMsg = sbException.getMessage();
-			if (StringUtil.isEmpty(errMsg)) {
-				errMsg = sbException.getErrorCode().getDescription();
-			}
 		} else {
 			errMsg = e.getMessage();
 		}
@@ -40,12 +37,9 @@ public class CommonUtil {
 		if (e instanceof SBException) {
 			SBException sbException = (SBException) e;
 			String errMsg = sbException.getMessage();
-			if (StringUtil.isEmpty(errMsg)) {
-				errMsg = sbException.getErrorCode().getDescription();
-			}
-			map.put("msg", errMsg);
+			map.put("msg", "[" + sbException.getErrorCode().getCode() + "," + errMsg + "]");
 		} else {
-			map.put("msg", SystemErrorCode.UNKNOWN_ERROR.getDescription());
+			map.put("msg", e.getMessage() == null ? e.toString() : e.getMessage());
 		}
 		return map;
 	}
@@ -58,17 +52,6 @@ public class CommonUtil {
 		}
 		map.put("status", "error");
 		map.put("msg", msg);
-		return map;
-	}
-
-	public static Map<String, Object> getErrorResultMap(Map<String, Object> map, SystemErrorCode errorCode) {
-		if (map == null) {
-			map = new HashMap<String, Object>();
-		} else {
-			map.clear();
-		}
-		map.put("status", "error");
-		map.put("msg", errorCode.getDescription());
 		return map;
 	}
 }

@@ -64,7 +64,7 @@ public class ExceptionHandlerAdvice {
 		StringWriter errorsWriter = new StringWriter();
 		e.printStackTrace(new PrintWriter(errorsWriter));
 		logger.error("发生Exception异常：" + errorsWriter);
-		return CommonUtil.getErrorResultMap(result, SystemErrorCode.SYS_INIT_ERROR);
+		return CommonUtil.getErrorResultMap(result, e);
 	}
 
 
