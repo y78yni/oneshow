@@ -41,11 +41,11 @@ public class UserController {
         Map<String, Object> result = CommonUtil.getDefualtResult();
         ValidatorUtils.validateEntity(loginForm);
 
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(UserConstants.EMAIL,loginForm.getEmail());
-        queryWrapper.eq(UserConstants.PASSWORD, loginForm.getPassWord());
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.eq(UserConstants.EMAIL,loginForm.getEmail());
+        qw.eq(UserConstants.PASSWORD, loginForm.getPassWord());
 
-        User user = userService.getOne(queryWrapper);
+        User user = userService.getOne(qw);
         if(user ==null){
             throw new SBException(SystemErrorCode.USER_USERPASSWORD_ERROR);
         }
@@ -59,12 +59,19 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/listAll", method = RequestMethod.GET)
-    public Map<String, Object> finAll(String userName, @RequestParam(value="password") String password) {
+    public Map<String, Object> finAll(String userName, String mobile, String email,String loginName,String password) {
         Map<String, Object> result = CommonUtil.getDefualtResult();
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.or(i -> i.eq("user_name",userName).or().eq("mobile",mobile).or().eq("email",email)).
+        or(i -> i.eq("user_password",password).or().eq("login_name",loginName));
+
+        User user = userService.getOne(qw);
+
+
 //        Page<User> userPage = new Page<>(1,2);
 //        IPage<User> userP = userService.page(userPage);
 //        result.put("user", userP);
-        result.put("msg",userName+password);
+        result.put("msg",user);
         return result;
     }
     /**
