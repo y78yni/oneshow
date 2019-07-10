@@ -1,7 +1,6 @@
 package com.oneshow.commom.util;
 
 import com.oneshow.commom.exception.SBException;
-import com.oneshow.commom.exception.SystemErrorCode;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
@@ -27,7 +26,7 @@ public class ValidatorUtils {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
         if (!constraintViolations.isEmpty()) {
             ConstraintViolation<Object> con = (ConstraintViolation<Object>)constraintViolations.iterator().next();
-            throw new SBException(SystemErrorCode.ILLEGAL_PARAMETER,con.getMessage());
+            throw new SBException(con.getMessage());
         }
     }
 }

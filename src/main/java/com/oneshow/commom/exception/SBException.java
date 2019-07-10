@@ -6,43 +6,45 @@ public class SBException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 
-    private final ErrorCode resultCode;
+    private String msg;
+    private int code = 500;
 
-    public SBException(ErrorCode resultCode) {
-        this.resultCode = resultCode;
+    public SBException(String msg) {
+        super(msg);
+        this.msg = msg;
     }
 
-    public SBException(ErrorCode resultCode, String message) {
-        super(message);
-        this.resultCode = resultCode;
+    public SBException(String msg, Throwable e) {
+        super(msg, e);
+        this.msg = msg;
     }
 
-    public SBException(ErrorCode resultCode, Throwable e) {
-        super(e);
-        this.resultCode = resultCode;
+    public SBException(String msg, int code) {
+        super(msg);
+        this.msg = msg;
+        this.code = code;
     }
 
-    public SBException(ErrorCode resultCode, String message, Throwable e) {
-        super(message, e);
-        this.resultCode = resultCode;
+    public SBException(String msg, int code, Throwable e) {
+        super(msg, e);
+        this.msg = msg;
+        this.code = code;
     }
 
-    public ExceptionType getType() {
-        return resultCode.getType();
+    public String getMsg() {
+        return msg;
     }
 
-    public ErrorCode getErrorCode() {
-        return resultCode;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    @Override
-    public String getMessage() {
-        if (StringUtil.isEmpty(super.getMessage())) {
-            return this.getErrorCode().getDescription();
-        } else {
-            return super.getMessage();
-        }
+    public int getCode() {
+        return code;
     }
 
+    public void setCode(int code) {
+        this.code = code;
+    }
 
 }
