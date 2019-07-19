@@ -1,4 +1,4 @@
-package com.oneshow.user;
+package com.oneshow;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

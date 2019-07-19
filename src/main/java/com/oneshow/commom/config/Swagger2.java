@@ -1,5 +1,4 @@
-package com.sunway.tongyi.config;
-
+package com.oneshow.commom.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

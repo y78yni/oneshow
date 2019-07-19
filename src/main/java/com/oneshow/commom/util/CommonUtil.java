@@ -1,4 +1,7 @@
-//package com.oneshow.commom.util;
+package com.oneshow.commom.util;
+
+import java.util.Random;
+
 //
 //
 //import com.oneshow.commom.exception.SBException;
@@ -6,8 +9,25 @@
 //import java.util.HashMap;
 //import java.util.Map;
 //
-//public class CommonUtil {
-//
+public class CommonUtil {
+
+    /**
+     * 随机生成指定字符串
+     * @param length
+     * @return
+     */
+    public static String getRandomString(int length){
+        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<length;i++){
+            int number=random.nextInt(62);
+            sb.append(str.charAt(number));
+        }
+        return sb.toString();
+    }
+
+
 //	public static Map<String, Object> getDefualtResult() {
 //		Map<String, Object> resultMap = new HashMap<String, Object>();
 //		resultMap.put("status", "success");
@@ -52,4 +72,4 @@
 //		map.put("msg", msg);
 //		return map;
 //	}
-//}
+}

@@ -1,4 +1,4 @@
-package com.oneshow.user.gen;
+package com.oneshow.goods.gen;
 
 
 import com.baomidou.mybatisplus.annotation.DbType;
@@ -21,7 +21,7 @@ public class MpGenerator {
 
         AutoGenerator mpg = new AutoGenerator();
         // 选择 freemarker 引擎，默认 Veloctiy
-        //  mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+       //  mpg.setTemplateEngine(new FreemarkerTemplateEngine());
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
@@ -35,11 +35,11 @@ public class MpGenerator {
         gc.setAuthor("Jun");
 
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
-        gc.setMapperName("%sMapper");
-        gc.setXmlName("%sMapper");
-        // gc.setServiceName("%sService");
-        // gc.setServiceImplName("%sServiceImpl");
-        //  gc.setControllerName("%sController");
+         gc.setMapperName("%sMapper");
+         gc.setXmlName("%sMapper");
+         gc.setServiceName("%sService");
+         gc.setServiceImplName("%sServiceImpl");
+       //  gc.setControllerName("%sController");
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -68,7 +68,7 @@ public class MpGenerator {
         //strategy.setTablePrefix(new String[] { "tlog_", "tsys_" });
         // 表名生成策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
-        strategy.setInclude(new String[]{"user"}); // 需要生成的表
+        strategy.setInclude(new String[]{"goods"}); // 需要生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 自定义实体父类
         // strategy.setSuperEntityClass("com.baomidou.demo.TestEntity");
@@ -92,10 +92,10 @@ public class MpGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.oneshow.user");
-        //pc.setController("controller");
-        //pc.setService("service");
-        //pc.setServiceImpl("service.impl");
+        pc.setParent("com.oneshow.goods");
+       // pc.setController("controller");
+        pc.setService("service");
+        pc.setServiceImpl("service.impl");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         //pc.setModuleName("test");
@@ -110,7 +110,7 @@ public class MpGenerator {
                 this.setMap(map);
             }
         };
-        // String templatePath = "/templates/mapper.xml.ftl";
+       // String templatePath = "/templates/mapper.xml.ftl";
         // 自定义 xxList.jsp 生成
         List<FileOutConfig> focList = new ArrayList<FileOutConfig>();
         /*focList.add(new FileOutConfig("/template/list.jsp.vm") {
@@ -127,7 +127,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/templates/mapper.xml.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return "src/main/resources/mapper/userMapper/" + tableInfo.getEntityName() + "Mapper.xml";
+                return "src/main/resources/mapper/goodsMapper/" + tableInfo.getEntityName() + "Mapper.xml";
             }
         });
         cfg.setFileOutConfigList(focList);

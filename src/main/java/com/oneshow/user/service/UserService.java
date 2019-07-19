@@ -1,7 +1,7 @@
 package com.oneshow.user.service;
 
-import com.oneshow.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.oneshow.user.entity.User;
 
 /**
  * <p>
@@ -9,8 +9,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author Jun
- * @since 2019-07-04
+ * @since 2019-07-12
  */
 public interface UserService extends IService<User> {
+        User login(String loginName,String password );
 
+        boolean sava(User user);
+
+        boolean savaPhone(User user);
+
+        User findPhone(String phone);
 }
