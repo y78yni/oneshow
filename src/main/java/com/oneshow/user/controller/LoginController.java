@@ -137,8 +137,8 @@ public class LoginController {
 	public R register(@RequestBody User user) {
 		ValidatorUtils.validateEntity(user);
 		// TODO 后续注册用户时不允许全数字作为userName，因为手机注册的时候默认手机也为用户名。
-		userService.save(user);
-		return R.ok();
+		userService.add(user);
+		return R.ok("注册成功");
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class LoginController {
 		if (!redisCode.equals(code) && redisCode != null) {
 			throw new SBException("验证码错误");
 		}
-		userService.savaPhone(user);
+		userService.addPhone(user);
 		redisUtil.del(user.getMobile());
 		return R.ok();
 	}

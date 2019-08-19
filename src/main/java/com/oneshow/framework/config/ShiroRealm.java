@@ -7,15 +7,12 @@ import com.oneshow.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Set;
 
 public class ShiroRealm extends AuthorizingRealm {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -35,27 +32,27 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
-        logger.info("===============Shiro权限认证开始");
-        User user = (User) principals.getPrimaryPrincipal();
-        if (user != null && !("".equals(user))) {
-
-            //通过用户名获取该用户所属角色名称
-            Set<String> roles = sysRoleService.selectRoleKeys(user.getId());
-            //通过用户名获取该用户所拥有权限的名称
-            Set<String> menus = sysMenuService.selectMenuKeys(user.getId());
-            //设置用户角色和权限
-            SimpleAuthorizationInfo authenticationInfo = new SimpleAuthorizationInfo();
-            if (user.getId() ==1)
-            {
-                authenticationInfo.addRole("admin");
-                authenticationInfo.addStringPermission("*:*:*");
-            }else {
-                authenticationInfo.setRoles(roles);
-                authenticationInfo.setStringPermissions(menus);
-            }
-            logger.info("===============Shiro权限认证成功");
-            return authenticationInfo;
-        }
+//        logger.info("===============Shiro权限认证开始");
+//        User user = (User) principals.getPrimaryPrincipal();
+//        if (user != null && !("".equals(user))) {
+//
+//            //通过用户名获取该用户所属角色名称
+//            Set<String> roles = sysRoleService.selectRoleKeys(user.getId());
+//            //通过用户名获取该用户所拥有权限的名称
+//            Set<String> menus = sysMenuService.selectMenuKeys(user.getId());
+//            //设置用户角色和权限
+//            SimpleAuthorizationInfo authenticationInfo = new SimpleAuthorizationInfo();
+//            if (user.getId() ==1)
+//            {
+//                authenticationInfo.addRole("admin");
+//                authenticationInfo.addStringPermission("*:*:*");
+//            }else {
+//                authenticationInfo.setRoles(roles);
+//                authenticationInfo.setStringPermissions(menus);
+//            }
+//            logger.info("===============Shiro权限认证成功");
+//            return authenticationInfo;
+//        }
         return null;
     }
 
@@ -64,18 +61,13 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
         logger.info("===============Shiro用户认证开始");
-
         //获取用户的输入的账号.
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         //通过username从数据库中查找 User对象，如果找到，没找到.
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         //获取登录用户名
         String username = upToken.getUsername();
-        String password = "";
-        if (upToken.getPassword() != null)
-        {
-            password = new String(upToken.getPassword());
-        }
+        String password = new String(upToken.getPassword());
 
         User user = userService.login(username,password);
         //可以在这里直接对用户名校验,或者调用 CredentialsMatcher 校验

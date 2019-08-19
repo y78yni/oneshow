@@ -1,15 +1,13 @@
-package com.oneshow.goods.entity;
+package com.oneshow.shop.entity;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -60,7 +58,7 @@ public class Goods extends Model<Goods> {
      * 商品库存数量
      */
 
-    private Integer number;
+    private Integer number = 0;
 
     /**
      * 商品描述

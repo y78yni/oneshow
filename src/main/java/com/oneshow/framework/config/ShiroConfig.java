@@ -1,9 +1,9 @@
 package com.oneshow.framework.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -36,32 +36,24 @@ public class ShiroConfig {
      *
      * @return
      */
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(1024);//散列的次数，比如散列两次，相当于 md5(md5(""));
-        return hashedCredentialsMatcher;
-    }
-
+//    @Bean
+//    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+//        // 指定加密算法
+//        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+//        // 指定加密次数
+//        hashedCredentialsMatcher.setHashIterations(10);
+//        // 指定这个就不会报错
+//       // hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+//        return hashedCredentialsMatcher;
+//    }
     @Bean
     public ShiroRealm shiroRealm() {
         ShiroRealm shiroRealm = new ShiroRealm();
-        shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        //shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return shiroRealm;
     }
 
-
-    @Bean
-    public SecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(shiroRealm());
-        // 自定义session管理 使用redis
-        securityManager.setSessionManager(sessionManager());
-        // 自定义缓存实现 使用redis
-        securityManager.setCacheManager(cacheManager());
-        return securityManager;
-    }
 
     //自定义sessionManager
     @Bean
@@ -73,7 +65,7 @@ public class ShiroConfig {
 
     /**
      * 配置shiro redisManager
-     *
+     * <p>
      * 使用的是shiro-redis开源插件
      *
      * @return
@@ -89,7 +81,7 @@ public class ShiroConfig {
 
     /**
      * cacheManager 缓存 redis实现
-     *
+     * <p>
      * 使用的是shiro-redis开源插件
      *
      * @return
@@ -103,7 +95,7 @@ public class ShiroConfig {
 
     /**
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
-     *
+     * <p>
      * 使用的是shiro-redis开源插件
      */
     @Bean
@@ -126,10 +118,15 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+
     @Bean
-    public ShiroDialect shiroDialect()
-    {
+    public ShiroDialect shiroDialect() {
         return new ShiroDialect();
+    }
+
+    @Bean
+    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
     }
 
     //自动创建代理，没有这个鉴权可能会出错
@@ -139,20 +136,24 @@ public class ShiroConfig {
         autoProxyCreator.setProxyTargetClass(true);
         return autoProxyCreator;
     }
+
     @Bean
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean shirFilter() {
         logger.info("ShiroConfiguration.shirFilter()");
-        ShiroFilterFactoryBean shiroFilterFactoryBean  = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager());
         //拦截器.
-        Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/goods/**", "anon");
+        filterChainDefinitionMap.put("/user/**", "anon");
         filterChainDefinitionMap.put("/register", "anon");
         filterChainDefinitionMap.put("/phoneRegister", "anon");
         filterChainDefinitionMap.put("/phoneCode", "anon");
+        filterChainDefinitionMap.put("/login", "anon");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        shiroFilterFactoryBean.setLoginUrl("/login");
+        //shiroFilterFactoryBean.setLoginUrl("/login");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
         //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
@@ -164,5 +165,16 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauth");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
+    }
+
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(shiroRealm());
+        // 自定义session管理 使用redis
+        securityManager.setSessionManager(sessionManager());
+        // 自定义缓存实现 使用redis
+        //   securityManager.setCacheManager(cacheManager());
+        return securityManager;
     }
 }

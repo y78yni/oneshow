@@ -1,7 +1,9 @@
 package com.oneshow.user.service;
 
-import com.oneshow.user.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.oneshow.user.entity.SysUserRole;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2019-07-11
  */
 public interface SysUserRoleService extends IService<SysUserRole> {
-
+    List<SysUserRole> getRoleList(Integer userId);
 }
