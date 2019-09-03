@@ -11,5 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Jun
  * @since 2019-08-15
  */
+
 public interface AttributeCategoryMapper extends BaseMapper<AttributeCategory> {
 }

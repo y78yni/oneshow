@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
  * @author Jun
  * @since 2019-07-12
  */
-@Data
 @ApiModel(value = "添加&更新用户对象")
 public class User extends Model<User> {
 

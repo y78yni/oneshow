@@ -25,7 +25,7 @@ import java.util.List;
  * @author Jun
  * @since 2019-07-11
  */
-@Service
+@Service("GoodsService")
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
     @Resource
     private GoodsMapper goodsMapper;

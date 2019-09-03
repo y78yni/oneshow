@@ -21,7 +21,7 @@ import java.util.List;
  * @author Jun
  * @since 2019-08-15
  */
-@Service
+@Service("AttributeCategoryService")
 public class AttributeCategoryServiceImpl extends ServiceImpl<AttributeCategoryMapper, AttributeCategory> implements AttributeCategoryService {
     @Resource
     private AttributeCategoryMapper attributeCategoryMapper;

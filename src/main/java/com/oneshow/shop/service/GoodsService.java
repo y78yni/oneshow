@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.oneshow.shop.entity.Goods;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -13,6 +14,7 @@ import com.oneshow.shop.entity.Goods;
  * @author Jun
  * @since 2019-07-11
  */
+@Service
 public interface GoodsService extends IService<Goods> {
     /**
      * 保存实体

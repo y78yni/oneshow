@@ -152,6 +152,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/phoneRegister", "anon");
         filterChainDefinitionMap.put("/phoneCode", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        //filterChainDefinitionMap.put("/shopCategory/**", "anon");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         //shiroFilterFactoryBean.setLoginUrl("/login");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
